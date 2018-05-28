@@ -1,0 +1,35 @@
+body {
+	   	  margin-top: 30px;
+	   	
+
+	   }
+
+	   #messageArea {
+	   	 display: none;
+	   }
+
+
+#users_online{
+	   	 display: none;
+	   }
+
+
+
+.space {
+	
+	
+	height:  32px;
+}
+
+.bar_space {
+	
+	width: 200px;
+	height:  32px;
+}
+
+#messageForm{
+	width: 500px;
+	hegith: 300px;
+
+}
+

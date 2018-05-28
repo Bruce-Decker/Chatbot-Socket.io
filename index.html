@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IO Chat</title>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>﻿
+	<link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel = "stylesheet" href = "style.css">
+	<link src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src = "https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+	
+	
+</head>
+<body background = "background.jpg">
+	 <div class = "container">
+	 	<div id ="userArea" class = "row">
+      <div class = "space"> </div>
+         <div class = "space"> </div>
+         <div class = "space"> </div>
+
+      <h2> Chatbot App </h2>
+      <div class = "col-md-10">
+          <img src="chatbot.png" alt="Girl in a jacket" height="300" width="400">
+      </div>
+        
+             
+             <div class = "col-md-4">
+              <br></br>
+              <div class = "space"> </div>
+             	 <form id = "userForm">
+                   	    <div class = "form-group">
+                   	    	<label> Username </label>
+                   	    	<input class = "form-control" id = "username" />
+                   	    	<br />
+                   	    	<input type = "submit" class = "btn btn-primary" value = "Login" />
+                   	    </div>
+
+                   </form>
+                   
+             </div>
+	 	</div>
+    <div id = "users_online">
+
+      <h1> Welcome to myspace! </h1>
+      <img src="myspace_logo.gif" alt="Girl in a jacket">
+
+      <h3> People Online </h3>
+      <div class = "col-md-10">
+        <img src="users.png" alt="Girl in a jacket" height="200" width="200">
+      </div>
+      <div class = "col-md-4">
+       <div class = "well">
+         <ul class = "list-group" id = "users"></ul>
+       </div>
+     </div>
+    </div>
+    
+	 	 <div id = 'messageArea' class = "row">
+                
+              
+              	 <div class = "test">
+              	 	 
+                 
+              	 	
+              	 </div>
+             
+              <div class = "col-md-8">
+                   <div class = "chat" id = "chat"> </div>
+
+                   <form id = "messageForm">
+                   	    <div class = "form-group">
+                         
+                   	    	   <label> Express yourself! </label>
+                          
+                   	    	<textarea class = "form-control" rows="8" id = "message"> </textarea>
+                   	    	<br />
+                   	    	<input type = "submit" class = "btn btn-primary" value = "Send Message">
+                   	    </div>
+
+                   </form>
+              </div>
+         </div>
+     </div>
+
+     <script>
+     	 $(function() {
+     	 	var socket = io.connect();
+     	 	var $messageForm = $('#messageForm');
+     	 	var $message = $('#message');
+     	 	var $chat = $('#chat');
+     	 	var $messageArea = $('#messageArea');
+     	 	var $userArea = $('#userArea');
+     	 	var $userForm = $('#userForm');
+     	 	var $users = $('#users');
+     	 	var $username = $('#username');
+
+
+     	 	$messageForm.submit(function(e) {
+     	 		e.preventDefault();
+     	 		socket.emit('send message', $message.val());
+          //alert($message.val())
+     	 		$message.val("");
+     	 	});
+
+     	 	socket.on('new message', function(info){
+     	 		$chat.append('<div class = "well"><strong>'+ info.user + '</strong>: ' +  info.msg + '</div>');
+
+          
+          
+          if (info.msg.toLowerCase().includes("headache")) {
+            $chat.append('<div class = "well"><strong>'+ 'Bot' + '</strong>: ' +  'Have you have taken mid-term exam?' + '</div>');
+          } 
+          
+
+          if (info.msg.toLowerCase().includes("exercising")) {
+            $chat.append('<div class = "well"><strong>'+ 'Bot' + '</strong>: ' +  'Do you want me to setup General Checkup?' + '</div>');
+          }
+
+      
+          if (info.msg.toLowerCase().includes("drossy")) {
+            $chat.append('<div class = "well"><strong>'+ 'Bot' + '</strong>: ' +  'Do you feel flu symptoms - like Cold & Fever??' + '</div>');
+          }
+
+          if (info.msg.toLowerCase().includes("stressed")) {
+            $chat.append('<div class = "well"><strong>'+ 'Bot' + '</strong>: ' +  'Are you taking any summer interships?' + '</div>');
+          }
+
+          if (info.msg.toLowerCase().includes("lonely")) {
+            $chat.append('<div class = "well"><strong>'+ 'Bot' + '</strong>: ' +  'Are you techie??' + '</div>');
+          }
+
+
+     	 	});
+
+     	 	$userForm.submit(function(e) {
+     	 		e.preventDefault();
+     	 		socket.emit('new user', $username.val(), function(info) {
+                      if(info) {
+                      	
+                      	 $userArea.hide();
+                         $('#users_online').show();
+                      	 $messageArea.show();
+                      }
+     	 		});
+     	 		$username.val("");
+     	 	});
+
+     	 	socket.on('get users', function(info) {
+     	 		var html = '';
+     	 		for (i = 0; i < info.length; i++)  {
+                    html += '<li class = "list-group-item">' + info[i] + '</li>';
+
+     	 		}
+     	 		$users.html(html);
+     	 	})
+
+
+     	 });
+
+     </script>
+
+</body>
+</html>
